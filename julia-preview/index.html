@@ -393,9 +393,17 @@ body { min-height: 100dvh; }
 }
 .tswitch button strong { display: block; }
 .tswitch button[aria-pressed='true'] { background: #b45309; border-color: #b45309; color: #fff; }
+.tswitch-short { display: none; }
 @media (max-width: 1023px) {
-  .tswitch { top: auto; bottom: calc(var(--tabbar) + env(safe-area-inset-bottom) + 60px); width: calc(100vw - 24px); }
-  .tswitch-buttons { width: 100%; } .tswitch button { flex: 1; }
+  /* Phone: one small pill next to the Notes button, never covering the photos */
+  .tswitch {
+    top: auto; left: 12px; transform: none; bottom: calc(var(--tabbar) + env(safe-area-inset-bottom) + 12px);
+    flex-direction: row; align-items: center; gap: 6px; padding: 4px 4px 4px 10px; border-radius: 999px; border-width: 1.5px;
+  }
+  .tswitch-long, .tswitch-desc { display: none; }
+  .tswitch-short { display: inline; }
+  .tswitch button { padding: 6px 10px; border-radius: 999px; text-align: center; min-height: 32px; }
+  .tswitch button strong { display: inline; }
 }
 </style></head>
 <body><div id="app"></div>
@@ -574,10 +582,10 @@ body { min-height: 100dvh; }
     const el = document.createElement('div');
     el.className = 'tswitch'; el.hidden = true;
     el.setAttribute('role', 'group'); el.setAttribute('aria-label', 'Test only: choose a Work page option');
-    el.innerHTML = `<span class="tswitch-label">Not part of the website: compare options</span>
+    el.innerHTML = `<span class="tswitch-label"><span class="tswitch-long">Not part of the website: compare options</span><span class="tswitch-short" aria-hidden="true">Test</span></span>
       <div class="tswitch-buttons">
-        <button type="button" data-opt="1"><strong>Option 1</strong> Photos in their own shapes</button>
-        <button type="button" data-opt="2"><strong>Option 2</strong> Same-size cropped thumbnails</button>
+        <button type="button" data-opt="1" aria-label="Option 1: photos in their own shapes"><strong>Option 1</strong><span class="tswitch-desc"> Photos in their own shapes</span></button>
+        <button type="button" data-opt="2" aria-label="Option 2: same-size cropped thumbnails"><strong>Option 2</strong><span class="tswitch-desc"> Same-size cropped thumbnails</span></button>
       </div>`;
     el.addEventListener('click', (e) => {
       const b = e.target.closest('button[data-opt]'); if (!b) return;
